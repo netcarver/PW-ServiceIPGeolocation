@@ -27,7 +27,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
     {
         return array(
             'title' => __('IP Geolocation Service', __FILE__),
-            'version' => 50,
+            'version' => 60,
             'summary' => __('Given an IP looks up the associated Geolocation data from db-ip.com', __FILE__),
             'href' => 'https://db-ip.com',
             'singular' => false,
