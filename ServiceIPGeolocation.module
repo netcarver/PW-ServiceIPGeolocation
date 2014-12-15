@@ -196,7 +196,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
             if (count($data)) {
                 $f = wire('modules')->get('InputfieldMarkup');
                 $f->label = __('Your API Key information') . ' - ' . date('Y-m-d H:i:s');
-                $f->description = __('Your dp-ip.com connection appears to be working!');
+                $f->description = __('Your db-ip.com connection appears to be working!');
                 $table = wire('modules')->get('MarkupAdminDataTable');
                 $table->headerRow(array('Item', 'Value'));
                 foreach ($data as $item => $value) {
@@ -206,7 +206,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
 <p><pre>
 $geo = wire("modules")->get("ServiceIPGeolocation");
 $ip  = $_SERVER["REMOTE_ADDR"];
-$loc = $geo->getLocation($ip);
+$loc = $geo->getLocation($ip); // In real code, do this in a try block in case service is down.
 $cc  = $loc["country"]; // $cc now contains the ISO 3166-1 alpha-2 country code of of the IP address.
 </pre></p>
                     ';
