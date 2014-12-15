@@ -41,8 +41,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
 	 *
 	 */
 	static $defaultSettings = array(
-		'service_url' => 'https://api.db-ip.com/',
-		'api_key'     => '',
+		'api_key' => '',
 	);
 
 
@@ -126,7 +125,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
 			$qp[] = $k . "=" . urlencode($v);
 		}
 
-		$url = $this->service_url . $method . "?" . implode("&", $qp);
+		$url = 'http://api.db-ip.com/'. $method . "?" . implode("&", $qp);
 
 		if (!$jdata = @file_get_contents($url)) {
 			throw new WireException(sprintf($this->_("%s: unable to fetch URL: %s"), $method, $url));
@@ -179,20 +178,11 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
 		$showInstructions = true;
 		$inputfields = new InputfieldWrapper();
 
-		$f = wire('modules')->get('InputfieldURL');
-		$f->attr('name', 'service_url');
-		$f->attr('value', empty($data['service_url']) ? self::$defaultSettings['service_url'] : $data['service_url']);
-		$f->label = __('db-ip.com Service URL');
-		$f->required = true;
-		$f->columnWidth = 50;
-		$inputfields->add($f);
-
 		$f = wire('modules')->get('InputfieldText');
 		$f->attr('name', 'api_key');
 		$f->attr('value', empty($data['api_key']) ? '' : $data['api_key']);
 		$f->label = __('db-ip.com API Key');
 		$f->required = true;
-		$f->columnWidth = 50;
 		$inputfields->add($f);
 
 
