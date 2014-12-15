@@ -17,130 +17,130 @@
 class ServiceIPGeolocation extends WireData implements Module, ConfigurableModule
 {
 
-	/**
-	 * getModuleInfo
-	 *
-	 * @return array
-	 *
-	 */
+    /**
+     * getModuleInfo
+     *
+     * @return array
+     *
+     */
     public static function getModuleInfo()
     {
-		return array(
-			'title' => __('IP Geolocation Service', __FILE__),
-			'version' => 50,
-			'summary' => __('Given an IP looks up the associated Geolocation data from db-ip.com', __FILE__),
-			'href' => 'https://db-ip.com',
-			'singular' => false,
-			'autoload' => false,
-		);
-	}
+        return array(
+            'title' => __('IP Geolocation Service', __FILE__),
+            'version' => 50,
+            'summary' => __('Given an IP looks up the associated Geolocation data from db-ip.com', __FILE__),
+            'href' => 'https://db-ip.com',
+            'singular' => false,
+            'autoload' => false,
+        );
+    }
 
 
-	/**
-	 * Default settings configured with this module
-	 *
-	 */
-	static $defaultSettings = array(
-		'api_key' => '',
-	);
-
-
-
-	/**
-	 * Whether or not entity encoding is on for returned string values (code, name, symbol)
-	 *
-	 * null=the default, which means it follows the current page's output formatting state.
-	 * true=entity encoding always
-	 * false=entity encoding always off
-	 *
-	 */
-	protected $entityEncode = null;
+    /**
+     * Default settings configured with this module
+     *
+     */
+    static $defaultSettings = array(
+        'api_key' => '',
+    );
 
 
 
-	/**
-	 * Construct and init default settings
-	 *
-	 */
+    /**
+     * Whether or not entity encoding is on for returned string values (code, name, symbol)
+     *
+     * null=the default, which means it follows the current page's output formatting state.
+     * true=entity encoding always
+     * false=entity encoding always off
+     *
+     */
+    protected $entityEncode = null;
+
+
+
+    /**
+     * Construct and init default settings
+     *
+     */
     public function __construct()
     {
         foreach (self::$defaultSettings as $key => $value) {
             $this->set($key, $value);
         }
-	}
+    }
 
 
 
-	/**
-	 * Initialize the module
-	 *
-	 */
+    /**
+     * Initialize the module
+     *
+     */
     public function init()
     {
-	}
+    }
 
 
 
-	/**
-	 * Turn on or off entity encoding
-	 *
-	 * If not called, this module will follow the entity encoding state of the current page.
-	 *
-	 * @param null|bool $entityEncode
-	 * @return this
-	 *
-	 */
+    /**
+     * Turn on or off entity encoding
+     *
+     * If not called, this module will follow the entity encoding state of the current page.
+     *
+     * @param null|bool $entityEncode
+     * @return this
+     *
+     */
     public function setEntityEncode($entityEncode = true)
     {
         if (!is_null($entityEncode) && !is_bool($entityEncode)) {
             throw new WireException($this->_("Invalid argument for entityEncode: must be null or bool"));
         }
-		$this->entityEncode = $entityEncode;
-		return $this;
-	}
+        $this->entityEncode = $entityEncode;
+        return $this;
+    }
 
 
 
-	/**
-	 * Entity encode a string, only if the current state requires it
-	 *
-	 * @param string $str
-	 * @return string
-	 *
-	 */
+    /**
+     * Entity encode a string, only if the current state requires it
+     *
+     * @param string $str
+     * @return string
+     *
+     */
     protected function entities($str)
     {
-		if ($this->entityEncode === true || ($this->entityEncode === null && $this->wire('page')->outputFormatting())) {
-			$str = $this->wire('sanitizer')->entities($str);
-		}
-		return trim($str);
-	}
+        if ($this->entityEncode === true || ($this->entityEncode === null && $this->wire('page')->outputFormatting())) {
+            $str = $this->wire('sanitizer')->entities($str);
+        }
+        return trim($str);
+    }
 
 
 
     protected function callAPI($method, $params = array())
     {
-		$qp = array("api_key=" . $this->api_key);
-		foreach ($params as $k => $v) {
-			$qp[] = $k . "=" . urlencode($v);
-		}
+        $qp = array("api_key=" . $this->api_key);
+        foreach ($params as $k => $v) {
+            $qp[] = $k . "=" . urlencode($v);
+        }
 
-		$url = 'http://api.db-ip.com/'. $method . "?" . implode("&", $qp);
+        $url = 'http://api.db-ip.com/'. $method . "?" . implode("&", $qp);
 
-		if (!$jdata = @file_get_contents($url)) {
-			throw new WireException(sprintf($this->_("%s: unable to fetch URL: %s"), $method, $url));
-		}
+        if (!$jdata = @file_get_contents($url)) {
+            throw new WireException(sprintf($this->_("%s: unable to fetch URL: %s"), $method, $url));
+        }
 
-		if (!$data = @json_decode($jdata)) {
-			throw new WireException(sprintf($this->_("%s: error decoding server response"), $method));
-		}
+        if (!$data = @json_decode($jdata)) {
+            throw new WireException(sprintf($this->_("%s: error decoding server response"), $method));
+        }
 
-		if (isset($data->error)) {
-			throw new WireException(sprintf($this->_("%s: server reported an error: %s"), $method, $data->error));
-		}
+        if (isset($data->error)) {
+            throw new WireException(sprintf($this->_("%s: server reported an error: %s"), $method, $data->error));
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
 
 
@@ -154,8 +154,8 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
      */
     public function getLocation($addr)
     {
-		return $this->callAPI("addrinfo", array("addr" => $addr));
-	}
+        return $this->callAPI("addrinfo", array("addr" => $addr));
+    }
 
 
 
@@ -166,59 +166,59 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
      *
      * @return array Associative array of key-value pairs containing information about the API key being used.
      */
-	public function getKeyInfo()
+    public function getKeyInfo()
     {
-		return $this->callAPI("keyinfo");
-	}
+        return $this->callAPI("keyinfo");
+    }
 
 
 
     static public function getModuleConfigInputfields(array $data)
     {
-		$showInstructions = true;
-		$inputfields = new InputfieldWrapper();
+        $showInstructions = true;
+        $inputfields = new InputfieldWrapper();
 
-		$f = wire('modules')->get('InputfieldText');
-		$f->attr('name', 'api_key');
-		$f->attr('value', empty($data['api_key']) ? '' : $data['api_key']);
-		$f->label = __('db-ip.com API Key');
-		$f->required = true;
-		$inputfields->add($f);
+        $f = wire('modules')->get('InputfieldText');
+        $f->attr('name', 'api_key');
+        $f->attr('value', empty($data['api_key']) ? '' : $data['api_key']);
+        $f->label = __('db-ip.com API Key');
+        $f->required = true;
+        $inputfields->add($f);
 
 
         if (!empty($data['api_key'])) {
 
-			$module = wire('modules')->get('ServiceIPGeolocation');
+            $module = wire('modules')->get('ServiceIPGeolocation');
             $module->setEntityEncode(false);
             $data = $module->getKeyInfo();
 
-			if (count($data)) {
-				$f = wire('modules')->get('InputfieldMarkup');
-				$f->label = __('Your API Key information') . ' - ' . date('Y-m-d H:i:s');
-				$f->description = __('Your dp-ip.com connection appears to be working!');
-				$table = wire('modules')->get('MarkupAdminDataTable');
-				$table->headerRow(array('Item', 'Value'));
-				foreach ($data as $item => $value) {
-					$table->row(array($item, $value));
-				}
-				$f->value .= $table->render() . '<h2>' . __('API Usage', __FILE__) . '</h2>' . '
-<p><pre>
-$geo = wire("modules")->get("ServiceIPGeolocation");
-$ip  = $_SERVER["REMOTE_ADDR"];
-$loc = $geo->getLocation($ip);
-</pre></p>
-				';
-				$inputfields->add($f);
-				$showInstructions = false;
-			}
-		}
+            if (count($data)) {
+                $f = wire('modules')->get('InputfieldMarkup');
+                $f->label = __('Your API Key information') . ' - ' . date('Y-m-d H:i:s');
+                $f->description = __('Your dp-ip.com connection appears to be working!');
+                $table = wire('modules')->get('MarkupAdminDataTable');
+                $table->headerRow(array('Item', 'Value'));
+                foreach ($data as $item => $value) {
+                    $table->row(array($item, $value));
+                }
+                $f->value .= $table->render() . '<h2>' . __('API Usage', __FILE__) . '</h2>' . '
+                    <p><pre>
+                    $geo = wire("modules")->get("ServiceIPGeolocation");
+                $ip  = $_SERVER["REMOTE_ADDR"];
+                $loc = $geo->getLocation($ip);
+                </pre></p>
+                    ';
+                $inputfields->add($f);
+                $showInstructions = false;
+            }
+        }
 
-		if ($showInstructions) {
-			wire()->message(__("To get an API key you will need to sign up at <a target='_blank' href='https://db-ip.com/api/'>db-ip.com</a>", __FILE__), Notice::allowMarkup);
-		}
+        if ($showInstructions) {
+            wire()->message(__("To get an API key you will need to sign up at <a target='_blank' href='https://db-ip.com/api/'>db-ip.com</a>", __FILE__), Notice::allowMarkup);
+        }
 
-		return $inputfields;
-	}
+        return $inputfields;
+    }
 }
 
 // eof
