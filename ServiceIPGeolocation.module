@@ -201,11 +201,12 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
                 foreach ($data as $item => $value) {
                     $table->row(array($item, $value));
                 }
-                $f->value .= $table->render() . '<h2>' . __('API Usage', __FILE__) . '</h2>' . '
+                $f->value .= $table->render() . '<h2>' . __('Simplified API Usage', __FILE__) . '</h2>' . '
 <p><pre>
 $geo = wire("modules")->get("ServiceIPGeolocation");
 $ip  = $_SERVER["REMOTE_ADDR"];
 $loc = $geo->getLocation($ip);
+$cc  = $loc["country"]; // $cc now contains the ISO 3166-1 alpha-2 country code of of the IP address.
 </pre></p>
                     ';
                 $inputfields->add($f);
