@@ -32,6 +32,7 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
             'href' => 'https://db-ip.com',
             'singular' => false,
             'autoload' => false,
+            'author' => 'Stephen Dickinson, QBox.co',
         );
     }
 
