@@ -202,11 +202,11 @@ class ServiceIPGeolocation extends WireData implements Module, ConfigurableModul
                     $table->row(array($item, $value));
                 }
                 $f->value .= $table->render() . '<h2>' . __('API Usage', __FILE__) . '</h2>' . '
-                    <p><pre>
-                    $geo = wire("modules")->get("ServiceIPGeolocation");
-                $ip  = $_SERVER["REMOTE_ADDR"];
-                $loc = $geo->getLocation($ip);
-                </pre></p>
+<p><pre>
+$geo = wire("modules")->get("ServiceIPGeolocation");
+$ip  = $_SERVER["REMOTE_ADDR"];
+$loc = $geo->getLocation($ip);
+</pre></p>
                     ';
                 $inputfields->add($f);
                 $showInstructions = false;
